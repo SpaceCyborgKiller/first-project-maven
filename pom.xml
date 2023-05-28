@@ -43,7 +43,19 @@
     </dependencies>
 
     <build>
+        <!--Sec. Resources-->
+        <resources>
+            <resource>
+                <directory>${project.build.directory}/dependency</directory>
+            </resource>
+        </resources>
         <plugins>
+            <!--manven install-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
 
             <!--- Configuration Manifest-->
             <plugin>
@@ -52,18 +64,35 @@
                 <version>2.4</version>
                 <configuration>
                     <archive>
-                        <index>true</index>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <!--                            <mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>-->
-                            <!--                            <rsrcMainClass>com.javarush.games.racer.RacerGame</rsrcMainClass>-->
+                            <classpathPrefix>lib</classpathPrefix>
+                            <mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <Main-Class>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</Main-Class>
                             <Rsrc-Main-Class>com.javarush.games.racer.RacerGame</Rsrc-Main-Class>
+                            <Class-Path>./</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>
+            </plugin>
+<!--Maven Depend-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                    <includeScope>compile</includeScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!--Off Test Strange-->
@@ -98,12 +127,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <!--Sec. Resources-->
-        <resources>
-            <resource>
-                <directory>/lib</directory>
-            </resource>
-        </resources>
+
 
     </build>
 
